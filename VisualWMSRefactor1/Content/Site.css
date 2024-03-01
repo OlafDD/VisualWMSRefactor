@@ -1,0 +1,28 @@
+﻿/*PALETA DE COLORES*/
+
+.wms-color-secundario-letra {
+    color: #378de5;
+}
+.vms-background-secundario {
+    background-color: #378de5;
+}
+
+.wms-footer{
+    display: flex;
+    justify-content: center;
+}
+
+.wms-subtitulo-azul{
+    margin-top: 90px;
+}
+
+.wms-navbar-layout {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.wms-card-home:hover {
+    background: #f1efef;
+    cursor: pointer;
+}
