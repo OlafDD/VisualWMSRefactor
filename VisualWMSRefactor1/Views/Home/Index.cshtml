@@ -2,25 +2,25 @@
     ViewBag.Title = "Home Page";
 }
 
-<main>
+<main class="uk-padding">
     <div>
         <h1 class="uk-nav-center wms-color-secundario-letra wms-subtitulo-azul">WAREHOUSE LEON</h1>
     </div>
     <div class="uk-child-width-expand@s uk-text-center uk-margin-large-top uk-margin-large-bottom" uk-grid>
         <div>
-            <div class="uk-card uk-card-default uk-card-body wms-card-home">
+            <div class="uk-card uk-card-default uk-card-body uk-card-hover" onclick="IrInventario()">
                 <img src="~/Images/almacenamiento.png" />
                 <h2>INVENTORY</h2>
             </div>
         </div>
         <div>
-            <div class="uk-card uk-card-default uk-card-body wms-card-home">
+            <div class="uk-card uk-card-default uk-card-body uk-card-hover" onclick="IrRequerimientos()">
                 <img src="~/Images/maquina-elevadora.png" />
                 <h2>OPEN REQ</h2>
             </div>
         </div>
         <div>
-            <div class="uk-card uk-card-default uk-card-body wms-card-home">
+            <div class="uk-card uk-card-default uk-card-body uk-card-hover" onclick="IrReceiving()">
                 <img src="~/Images/valores.png" />
                 <h2>RECEIVING</h2>
             </div>

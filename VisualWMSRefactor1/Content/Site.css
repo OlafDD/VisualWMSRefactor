@@ -26,3 +26,11 @@
     background: #f1efef;
     cursor: pointer;
 }
+
+.wms-op-req-cards{
+    display: flex;
+}
+
+.wms-op-req-cards * {
+    width: 20%;
+}

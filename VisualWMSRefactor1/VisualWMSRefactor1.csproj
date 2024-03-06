@@ -118,9 +118,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DBHelper.cs" />
+    <Compile Include="Models\OTR_RAW.cs" />
+    <Compile Include="Models\PART_NUMBERS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Config\DBConfig.xml" />
     <Content Include="Content\Site.js" />
     <Content Include="Content\uikit-3.19.1\css\uikit-rtl.css" />
     <Content Include="Content\uikit-3.19.1\css\uikit-rtl.min.css" />
@@ -164,6 +168,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\OpenReq\OpenReq.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -177,12 +184,11 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Inventory\Index.cshtml" />
-    <Content Include="Views\Receiving\IndexReceiving.cshtml" />
-    <Content Include="Views\OpenReq\IndexOpenReq.cshtml" />
+    <Content Include="Views\OpenReq\Index.cshtml" />
+    <Content Include="Views\Receiving\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

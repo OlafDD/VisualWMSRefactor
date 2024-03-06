@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<conexion>
+	<dataBase datos="WMSDataBase">
+		<server>(localdb)\SERVERPRUEBA</server>
+		<db>ONIXWMS</db>
+		<user>AD\olivier.martinez</user>
+	</dataBase>
+</conexion>
