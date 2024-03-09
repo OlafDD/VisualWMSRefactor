@@ -14,5 +14,16 @@ namespace VisualWMSRefactor1.Controllers
         {
             return View();
         }
+        public JsonResult ObtenerPlantasDistintas()
+        {
+            try
+            {
+                return Json(OTR_RAW.ObtenerPlantasDistintas(),JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex);
+            }
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace VisualWMSRefactor1.Models
         public string Status { get; set; }
         public string DateCreated { get; set; }
 
-        public static List<OTR_RAW> ObtenerRequerimientos(string fechaLimiteInferior)
+        public static List<OTR_RAW> ObtenerRequerimientos(string fechaLimiteInferior, string planta)
         {
             List<OTR_RAW> requerimientos = new List<OTR_RAW>();
             SqlConnection conn = DBHelper.Conexion();
@@ -45,6 +45,7 @@ namespace VisualWMSRefactor1.Models
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@FechaInferior", fechaLimiteInferior);
+                    command.Parameters.AddWithValue("@planta", planta);
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -52,16 +53,17 @@ namespace VisualWMSRefactor1.Models
                         {
                             requerimientos.Add(new OTR_RAW()
                             {
-                                ID = reader.GetDecimal(0),
-                                DestStorBin = reader.GetString(1),
+                                ID = reader.IsDBNull(0) ? decimal.Zero : reader.GetDecimal(0),
+                                DestStorBin = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
                                 Material = new PART_NUMBERS
                                 {
-                                    MatNR = reader.GetString(2),
-                                    MacTX = reader.GetString(6),
+                                    MatNR = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
+                                    MacTX = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
                                 },
-                                OP_User = reader.GetString(3),
-                                TRReqQuantity = reader.GetString(4),
-                                CreatedOn = reader.GetString(5),
+                                OP_User = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
+                                TRReqQuantity = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
+                                CreatedOn = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
+                                DestStoryType = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
                             });
                         }
                     }
@@ -76,6 +78,37 @@ namespace VisualWMSRefactor1.Models
                 conn.Close();
             }
             return requerimientos;
+        }
+        public static List<string> ObtenerPlantasDistintas()
+        {
+            List<string> plantas = new List<string>();
+            SqlConnection conn = DBHelper.Conexion();
+            if (conn.State == ConnectionState.Closed)
+                conn.Open();
+            try
+            {
+                using (SqlCommand command = new SqlCommand("sp_OTR_RAW_ObtenerPlantaDistinta", conn))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            plantas.Add(reader.GetString(0));
+                        }
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return plantas;
         }
     }
 }

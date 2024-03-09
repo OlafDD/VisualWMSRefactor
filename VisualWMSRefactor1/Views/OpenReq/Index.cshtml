@@ -5,12 +5,12 @@
 
 <main class="uk-padding">
     <div>
-        <h1 class="uk-nav-center wms-color-secundario-letra wms-subtitulo-azul">OPEN REQUEST LEON</h1>
+        <h1 class="uk-nav-center wms-color-secundario-letra wms-subtitulo-azul" id="plantaTitulo"></h1>
     </div>
     <div class="uk-flex uk-margin-medium-bottom">
-        <div>
-            <button class="uk-button uk-button-primary uk-margin-small-right">Product Line</button>   
-        </div>
+        @*<div>
+                <button class="uk-button uk-button-primary uk-margin-small-right">Product Line</button>
+            </div>*@
         <div class="uk-flex">
             <label class="uk-margin-small-right">Filter: </label>
             <select class="uk-select uk-width-small" aria-label="Select">
@@ -18,9 +18,15 @@
                 <option>See all</option>
             </select>
         </div>
+        <div class="uk-flex">
+            <label class="uk-margin-large-left uk-margin-small-right">Storage type: </label>
+            <div class="uk-flex" id="filtro-tipo-almacenamiento">
+                @*<label><input class="uk-checkbox" type="checkbox" checked> A</label>*@
+            </div>
+        </div>
     </div>
     <div id="requerimientos">
-        
+
     </div>
 </main>
 

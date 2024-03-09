@@ -1,20 +1,29 @@
-﻿window.onload = function () {
+﻿let warehouse = document.getElementById('plantaTitulo');
+window.onload = function () {
 
     cargarRequerimientos();
 }
 
-let cargarRequerimientos = () => {
+let cargarRequerimientos = async () => {
 
     let fechaHace24Horas = moment().subtract(1, 'days').format('LLL');
     let contenedorRequerimientos = document.getElementById('requerimientos');
+    const valores = window.location.search;
+    const urlParams = new URLSearchParams(valores);
+    let planta = urlParams.get('idp');
+    var tipoAlmacenamiento = [];
+
+    //Nombre título warehouse
+    warehouse.innerHTML = `OPEN REQUEST ${planta}`;
 
     contenedorRequerimientos.setAttribute('class', 'uk-grid-column-small uk-grid-row-large uk-child-width-1-4@s uk-text-center');
     contenedorRequerimientos.setAttribute('uk-grid', '');
 
-    axios.get(`/OpenReq/ObtenerRequerimientos?fechaLimiteInferior=${fechaHace24Horas}`)
+    await axios.get(`/OpenReq/ObtenerRequerimientos?fechaLimiteInferior=${fechaHace24Horas}&planta=${planta}`)
         .then(response => {
 
             let requerimientos = response.data;
+
             console.log(requerimientos);
             requerimientos.forEach(function (req) {
 
@@ -47,12 +56,46 @@ let cargarRequerimientos = () => {
 
                 contenedorRequerimientos.appendChild(card);
 
+                //Añadir a arreglo de almacenamiento
+                tipoAlmacenamiento.push(req.DestStoryType);
+
             });
 
+            cargarFiltroAlmacenamiento(tipoAlmacenamiento);
         })
         .catch(error => {
             console.log(error);
         });
 }
 
+let cargarFiltroAlmacenamiento = (tipoAlmacenamiento) => {
 
+    let seccionFiltroAlmacenamiento = document.getElementById('filtro-tipo-almacenamiento');
+
+    eliminarDuplicados(tipoAlmacenamiento);
+    tipoAlmacenamiento.forEach((tipo) => {
+
+        let labelTipoAlmacenamiento = document.createElement('label');
+        let checkTipoAlmacenamiento = document.createElement('input');
+
+        checkTipoAlmacenamiento.setAttribute('class','uk-checkbox uk-margin-small-left uk-margin-medium-right');
+        checkTipoAlmacenamiento.setAttribute('type', 'checkbox');
+
+        labelTipoAlmacenamiento.innerText = tipo;
+        labelTipoAlmacenamiento.appendChild(checkTipoAlmacenamiento);      
+
+        seccionFiltroAlmacenamiento.appendChild(labelTipoAlmacenamiento);
+    });
+}
+
+let eliminarDuplicados = (a) => {
+
+    for (let i = a.length - 1; i > 0; i--) {
+        let elem = a[i];
+        for (let j = i - 1; j >= 0; j--) {
+            if (elem == a[j]) {
+                a.splice(j, 1);
+            }
+        }
+    }
+}

@@ -14,11 +14,11 @@ namespace VisualWMSRefactor1.Controllers
         {
             return View();
         }
-        public JsonResult ObtenerRequerimientos(string fechaLimiteInferior)
+        public JsonResult ObtenerRequerimientos(string fechaLimiteInferior, string planta)
         {
             try
             {
-                return Json(OTR_RAW.ObtenerRequerimientos(fechaLimiteInferior),JsonRequestBehavior.AllowGet);
+                return Json(OTR_RAW.ObtenerRequerimientos(fechaLimiteInferior,planta),JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

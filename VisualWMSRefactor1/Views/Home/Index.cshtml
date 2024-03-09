@@ -4,7 +4,18 @@
 
 <main class="uk-padding">
     <div>
-        <h1 class="uk-nav-center wms-color-secundario-letra wms-subtitulo-azul">WAREHOUSE LEON</h1>
+        <h1 class="uk-nav-center wms-color-secundario-letra wms-subtitulo-azul">WAREHOUSE</h1>
+    </div>
+    <div class="uk-flex uk-margin-medium-bottom">
+        @*<div>
+                <button class="uk-button uk-button-primary uk-margin-small-right">Product Line</button>
+            </div>*@
+        <div class="uk-flex">
+            <label class="uk-margin-small-right">Plant filter: </label>
+            <select class="uk-select uk-width-small" aria-label="Select" id="plantas">
+                <option selected></option>
+            </select>
+        </div>
     </div>
     <div class="uk-child-width-expand@s uk-text-center uk-margin-large-top uk-margin-large-bottom" uk-grid>
         <div>
@@ -27,3 +38,5 @@
         </div>
     </div>
 </main>
+
+<script src="~/Scripts/Home/Home.js"></script>

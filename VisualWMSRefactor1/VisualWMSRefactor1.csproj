@@ -158,6 +158,7 @@
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\axios.js" />
     <Content Include="Scripts\axios.min.js" />
+    <Content Include="Scripts\Home\Home.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
     <Content Include="Scripts\jquery-3.7.1.slim.js" />
