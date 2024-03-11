@@ -43,7 +43,7 @@ let cargarRequerimientos = async () => {
                 parrafoExistencia.innerText = `Stock Requeriment ${req.TRReqQuantity}`;
                 parrafoFecha.innerText = req.CreatedOn;
 
-                interiorCard.setAttribute('class', 'uk-card uk-card-default uk-card-hover');
+                interiorCard.setAttribute('class', `uk-card uk-card-default uk-card-hover ${req.DestStoryType} cartas wms-borde-card`);
                 tituloParte.setAttribute('class', 'wms-color-secundario-letra');
 
                 card.appendChild(interiorCard);
@@ -78,11 +78,14 @@ let cargarFiltroAlmacenamiento = (tipoAlmacenamiento) => {
         let labelTipoAlmacenamiento = document.createElement('label');
         let checkTipoAlmacenamiento = document.createElement('input');
 
-        checkTipoAlmacenamiento.setAttribute('class','uk-checkbox uk-margin-small-left uk-margin-medium-right');
+        checkTipoAlmacenamiento.setAttribute('class', 'uk-checkbox uk-margin-small-left uk-margin-medium-right');
         checkTipoAlmacenamiento.setAttribute('type', 'checkbox');
+        checkTipoAlmacenamiento.checked = true;
+        checkTipoAlmacenamiento.setAttribute('onchange', `filtroAlmacenamiento("${tipo}")`);
+        checkTipoAlmacenamiento.setAttribute('id', `${tipo}`);
 
         labelTipoAlmacenamiento.innerText = tipo;
-        labelTipoAlmacenamiento.appendChild(checkTipoAlmacenamiento);      
+        labelTipoAlmacenamiento.appendChild(checkTipoAlmacenamiento);
 
         seccionFiltroAlmacenamiento.appendChild(labelTipoAlmacenamiento);
     });
@@ -98,4 +101,26 @@ let eliminarDuplicados = (a) => {
             }
         }
     }
+}
+
+let filtroAlmacenamiento = (tipoAlmacenamiento) => {
+
+    let cardsOcultar = document.getElementsByClassName(tipoAlmacenamiento);
+    let cardsMostrar = document.getElementsByClassName('cartas');
+    let checkBox = document.getElementById(tipoAlmacenamiento);
+
+    if (!checkBox.checked) {
+        for (let carta = 0; carta < cardsMostrar.length; carta++) {
+            cardsMostrar[carta].style.display = 'block';
+        }
+        for (let carta = 0; carta < cardsOcultar.length; carta++) {
+            cardsOcultar[carta].style.display = 'none';
+        }
+    }
+    else {
+        for (let carta = 0; carta < cardsOcultar.length; carta++) {
+            cardsOcultar[carta].style.display = 'block';
+        }
+    }
+
 }

@@ -34,3 +34,7 @@
 .wms-op-req-cards * {
     width: 20%;
 }
+
+.wms-borde-card {
+    border: 1px solid #f1efef;
+}
