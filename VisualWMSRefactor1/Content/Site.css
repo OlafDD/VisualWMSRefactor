@@ -6,6 +6,9 @@
 .vms-background-secundario {
     background-color: #378de5;
 }
+.vms-background-card-completed {
+    background-color: #49ff49;
+}
 
 .wms-footer{
     display: flex;
@@ -37,4 +40,9 @@
 
 .wms-borde-card {
     border: 1px solid #f1efef;
+}
+
+.wms-material-hover:hover {
+    cursor: pointer;
+    color: #378de5;
 }

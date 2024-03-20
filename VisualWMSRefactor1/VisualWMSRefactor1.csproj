@@ -172,6 +172,7 @@
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\OpenReq\OpenReq.js" />
+    <Content Include="Scripts\qrcode.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

@@ -1,4 +1,6 @@
 ﻿let warehouse = document.getElementById('plantaTitulo');
+const modalQR = document.getElementById('modal-qr');
+let idCardCompletada;
 window.onload = function () {
 
     cargarRequerimientos();
@@ -44,7 +46,10 @@ let cargarRequerimientos = async () => {
                 parrafoFecha.innerText = req.CreatedOn;
 
                 interiorCard.setAttribute('class', `uk-card uk-card-default uk-card-hover ${req.DestStoryType} cartas wms-borde-card`);
+                interiorCard.setAttribute('id', `${req.ID}`);
                 tituloParte.setAttribute('class', 'wms-color-secundario-letra');
+                parrafoMaterial.setAttribute('onclick', `generarQR("${req.Material.MatNR}","${req.DestStorBin}","${req.ID}")`);
+                parrafoMaterial.setAttribute('class','wms-material-hover');
 
                 card.appendChild(interiorCard);
                 interiorCard.appendChild(tituloParte);
@@ -123,4 +128,35 @@ let filtroAlmacenamiento = (tipoAlmacenamiento) => {
         }
     }
 
+}
+
+let generarQR = (material,parte,idRequerimiento) => {
+
+    let divQR = document.getElementById('qrcode');
+    let pQR = document.getElementById('qr-p');
+    let pMaterial = document.getElementById('material-p');
+    let pParte = document.getElementById('parte-p');
+    let cadenaQR = `Y${parte}\t\tP${material}`;
+
+    divQR.innerHTML = '';
+    var qrcode = new QRCode("qrcode");
+
+    qrcode.makeCode(cadenaQR);
+
+    pQR.innerText = `QR: ${cadenaQR}`
+    pMaterial.innerText = `Material: ${material}`;
+    pParte.innerText = `Part: ${parte}`;
+
+    idCardCompletada = idRequerimiento;
+
+    UIkit.modal(modalQR).show();
+}
+
+let completarRequerimiento = () => {
+
+    let cardCompletadaVerde = document.getElementById(idCardCompletada);
+
+    cardCompletadaVerde.style.backgroundColor = '#49ff49';
+    UIkit.modal(modalQR).hide();
+    UIkit.notification("Requirement completed...", "success");
 }
