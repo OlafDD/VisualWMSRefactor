@@ -119,6 +119,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DBHelper.cs" />
+    <Compile Include="Models\INVENTORY_RAW.cs" />
     <Compile Include="Models\OTR_RAW.cs" />
     <Compile Include="Models\PART_NUMBERS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -159,6 +160,7 @@
     <Content Include="Scripts\axios.js" />
     <Content Include="Scripts\axios.min.js" />
     <Content Include="Scripts\Home\Home.js" />
+    <Content Include="Scripts\Inventory\Inventory.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
     <Content Include="Scripts\jquery-3.7.1.slim.js" />

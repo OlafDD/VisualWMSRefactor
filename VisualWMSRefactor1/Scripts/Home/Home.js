@@ -1,4 +1,7 @@
-﻿window.onload = function () {
+﻿
+let plantaSeleccionada; 
+
+window.onload = function () {
 
     obtenerPlantasDistintas();
 }
@@ -28,10 +31,20 @@ let obtenerPlantasDistintas = () => {
 
 let IrRequerimientos = () => {
 
-    let plantaSeleccionada = document.getElementById('plantas').value;
+    plantaSeleccionada = document.getElementById('plantas').value;
 
     if (plantaSeleccionada === "")
         UIkit.notification("You must choose a plant...", "warning");
     else
         window.location.href = `/OpenReq/Index?idp=${plantaSeleccionada}`;
+}
+
+let IrInventario = () => {
+
+    plantaSeleccionada = document.getElementById('plantas').value;
+
+    if (plantaSeleccionada === "")
+        UIkit.notification("You must choose a plant...", "warning");
+    else
+        window.location.href = `/Inventory/Index?idp=${plantaSeleccionada}`;
 }
