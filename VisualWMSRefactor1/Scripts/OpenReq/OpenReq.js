@@ -45,7 +45,7 @@ let cargarRequerimientos = async () => {
                 parrafoExistencia.innerText = `Stock Requeriment ${req.TRReqQuantity}`;
                 parrafoFecha.innerText = req.CreatedOn;
 
-                interiorCard.setAttribute('class', `uk-card uk-card-default uk-card-hover ${req.DestStoryType} cartas wms-borde-card`);
+                interiorCard.setAttribute('class', `uk-card-hover ${req.DestStoryType} cartas wms-borde-card`);
                 interiorCard.setAttribute('id', `${req.ID}`);
                 tituloParte.setAttribute('class', 'wms-color-secundario-letra');
                 parrafoMaterial.setAttribute('onclick', `generarQR("${req.Material.MatNR}","${req.DestStorBin}","${req.ID}")`);
@@ -115,9 +115,9 @@ let filtroAlmacenamiento = (tipoAlmacenamiento) => {
     let checkBox = document.getElementById(tipoAlmacenamiento);
 
     if (!checkBox.checked) {
-        for (let carta = 0; carta < cardsMostrar.length; carta++) {
-            cardsMostrar[carta].style.display = 'block';
-        }
+        //for (let carta = 0; carta < cardsMostrar.length; carta++) {
+        //    cardsMostrar[carta].style.display = 'block';
+        //}
         for (let carta = 0; carta < cardsOcultar.length; carta++) {
             cardsOcultar[carta].style.display = 'none';
         }
