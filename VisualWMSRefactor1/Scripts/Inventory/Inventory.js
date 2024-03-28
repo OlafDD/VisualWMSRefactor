@@ -1,4 +1,5 @@
-﻿let warehouse = document.getElementById('plantaTituloInventario');
+﻿
+let warehouse = document.getElementById('plantaTituloInventario');
 let loader = document.getElementById('preloader_4');
 let contenedorInventario = document.getElementById('inventario');
 const cantidadPaginacion = 50;
@@ -8,7 +9,8 @@ let arrayGlobalInventario = [];
 let filtros = {
     almacenamiento: [],
     locacion: []
-                };
+};
+let inicioCardsInventario = 0;
 
 window.onload = function () {
 
@@ -110,7 +112,7 @@ let cargarFiltroLocacion = (locacion) => {
         checkTipoLocacion.setAttribute('id', `${tipo}`);
         checkTipoLocacion.setAttribute('onclick', `filtroLocacion('${tipo}')`);
 
-       /* checkTipoLocacion.checked = true;*/
+        /* checkTipoLocacion.checked = true;*/
 
         labelTipoLocacion.innerText = tipo;
         labelTipoLocacion.appendChild(checkTipoLocacion);
@@ -123,6 +125,7 @@ let verCards = (limiteInferiorArray) => {
 
     contenedorInventario.innerHTML = '';
     let limiteSuperiorArray = limiteInferiorArray + 50;
+    inicioCardsInventario = limiteInferiorArray;
 
     filtros.almacenamiento = tipoAlmacenamiento;
     filtros.locacion = locacion;
@@ -156,6 +159,7 @@ let verCards = (limiteInferiorArray) => {
         interiorCard.appendChild(divSumaTotal);
 
         tituloParte.setAttribute('class', 'wms-color-secundario-letra');
+        tituloParte.setAttribute('onclick', `verPartesIguales('${inv.StorageBin}')`);
         divSumaTotal.setAttribute('class', 'flex-space');
         totalSuma.setAttribute('class', 'margin-total');
         interiorCard.setAttribute('class', 'wms-borde-card');
@@ -211,7 +215,7 @@ let filtroLocacion = (locacionAlmacenamiento) => {
     else {
         filtros.locacion = filtros.locacion.filter(filtro => filtro != locacionAlmacenamiento);
     }
-    
+
     for (let x = 0; x < hijosInventario.length; x++) {
 
         let claseAlmacenamiento = false;
@@ -244,6 +248,46 @@ let checkFiltros = () => {
         document.getElementById(tipo).checked = true;
     });
 
+}
+
+let verPartesIguales = (nombreParte) => {
+
+    let modalTablaInventario = document.getElementById('modal-parte-inv');
+    let bodyTablaIgualesParte = document.getElementById('tbodyTabla'); 
+
+    bodyTablaIgualesParte.innerHTML = '';
+
+    for (let x = inicioCardsInventario; x < inicioCardsInventario + 50; x++) {
+
+        let inv = arrayGlobalInventario[x];
+
+        if (inv.StorageBin === nombreParte) {
+
+            let tr = document.createElement('tr');
+            let tdTitulo = document.createElement('td');
+            let tdMaterial = document.createElement('td');
+            let tdMaterialDescripcion = document.createElement('td');
+            let tdTotal = document.createElement('td');
+            let tdTotalStock = document.createElement('td');
+
+            tdTitulo.innerText = inv.StorageBin;
+            tdMaterial.innerText = inv.Material;
+            tdMaterialDescripcion.innerText = inv.MaterialDesc;
+            tdTotal.innerText = inv.TotalStock;
+            tdTotalStock.innerText = inv.StockSuma;
+
+            tr.appendChild(tdTitulo);
+            tr.appendChild(tdMaterial);
+            tr.appendChild(tdMaterialDescripcion);
+            tr.appendChild(tdTotal);
+            tr.appendChild(tdTotalStock);
+
+            bodyTablaIgualesParte.appendChild(tr);
+        }
+
+    }
+
+    UIkit.modal(modalTablaInventario).show();
 }
 
 let eliminarDuplicados = (a) => {

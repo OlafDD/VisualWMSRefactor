@@ -7,7 +7,7 @@
     <div>
         <h1 class="uk-nav-center wms-color-secundario-letra wms-subtitulo-azul" id="plantaTituloInventario"></h1>
     </div>
-    <div class="uk-flex uk-margin-medium-bottom">
+    <div class="uk-flex uk-margin-medium-bottom uk-overflow-auto">
         <div class="uk-flex">
             <label class="uk-margin-large-left uk-margin-small-right">Storage type: </label>
             <div class="uk-flex" id="filtro-tipo-almacenamiento-inv">
@@ -26,9 +26,32 @@
     <ul class="uk-pagination uk-flex-center" uk-margin id="paginacion">
         <li><a href="#"><span uk-pagination-previous></span></a></li>
         @*<li><a href="#">1</a></li>
-        <li><a href="#"><span uk-pagination-next></span></a></li>*@
+            <li><a href="#"><span uk-pagination-next></span></a></li>*@
     </ul>
 </main>
+
+<div id="modal-parte-inv" class="uk-flex-top" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical uk-overflow-auto">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-overflow-auto">
+
+            <table class="uk-table uk-table-divider">
+                <thead>
+                    <tr>
+                        <th>Storage Bin</th>
+                        <th>Material</th>
+                        <th>Material Description</th>
+                        <th>Total</th>
+                        <th>Total Stock</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyTabla">
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
 
 <div id="preloader_4">
     <span></span>
