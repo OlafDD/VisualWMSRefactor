@@ -6,11 +6,14 @@ const cantidadPaginacion = 50;
 var tipoAlmacenamiento = [];
 var locacion = [];
 let arrayGlobalInventario = [];
+let direccionAlmacenamiento = [];
+let materialesEliminar = [];
 let filtros = {
     almacenamiento: [],
     locacion: []
 };
 let inicioCardsInventario = 0;
+let planta;
 
 window.onload = function () {
 
@@ -21,7 +24,7 @@ let cargarInventario = async () => {
 
     const valores = window.location.search;
     const urlParams = new URLSearchParams(valores);
-    let planta = urlParams.get('idp');
+    planta = urlParams.get('idp');
 
     //Nombre título warehouse
     warehouse.innerHTML = `INVENTORY ${planta}`;
@@ -35,15 +38,36 @@ let cargarInventario = async () => {
             let inventario = response.data;
 
             arrayGlobalInventario = inventario;
-            cargarPaginacion(inventario.length);
             inventario.forEach(function (inv) {
 
                 tipoAlmacenamiento.push(inv.StorageType);
                 locacion.push(inv.StorageLocation);
 
+                //Llenar array de locacion almacenamiento con los diferentes
+
+                if (!direccionAlmacenamiento.includes(inv.StorageBin)) {
+
+                    direccionAlmacenamiento.push(inv.StorageBin);
+                    materialesEliminar = [];
+
+                    for (let x = arrayGlobalInventario.length - 1; x > 0; x--) {
+
+                        if (arrayGlobalInventario[x].StorageBin === inv.StorageBin) {
+                            if (materialesEliminar.includes(arrayGlobalInventario[x].Material))
+                                arrayGlobalInventario.splice(x, 1);
+
+                            else
+                                materialesEliminar.push(arrayGlobalInventario[x].Material);
+
+                        }
+                    }
+                }
+
                 loader.style.display = 'none';
             });
 
+            console.log(arrayGlobalInventario);
+            cargarPaginacion(arrayGlobalInventario.length);
             cargarFiltroAlmacenamiento(tipoAlmacenamiento);
             cargarFiltroLocacion(locacion);
         })
@@ -125,6 +149,9 @@ let verCards = (limiteInferiorArray) => {
 
     contenedorInventario.innerHTML = '';
     let limiteSuperiorArray = limiteInferiorArray + 50;
+
+    if (limiteSuperiorArray > arrayGlobalInventario.length) limiteSuperiorArray = arrayGlobalInventario.length;
+
     inicioCardsInventario = limiteInferiorArray;
 
     filtros.almacenamiento = tipoAlmacenamiento;
@@ -158,8 +185,8 @@ let verCards = (limiteInferiorArray) => {
         divSumaTotal.appendChild(totalSuma);
         interiorCard.appendChild(divSumaTotal);
 
-        tituloParte.setAttribute('class', 'wms-color-secundario-letra');
-        tituloParte.setAttribute('onclick', `verPartesIguales('${inv.StorageBin}')`);
+        tituloParte.setAttribute('class', 'wms-color-secundario-letra wms-material-hover');
+        tituloParte.setAttribute('onclick', `verPartesIguales('${inv.StorageBin}','${inv.Material}','${planta}')`);
         divSumaTotal.setAttribute('class', 'flex-space');
         totalSuma.setAttribute('class', 'margin-total');
         interiorCard.setAttribute('class', 'wms-borde-card');
@@ -250,42 +277,49 @@ let checkFiltros = () => {
 
 }
 
-let verPartesIguales = (nombreParte) => {
+let verPartesIguales = async (nombreParte, material, planta) => {
 
     let modalTablaInventario = document.getElementById('modal-parte-inv');
-    let bodyTablaIgualesParte = document.getElementById('tbodyTabla'); 
+    let bodyTablaIgualesParte = document.getElementById('tbodyTabla');
 
     bodyTablaIgualesParte.innerHTML = '';
 
-    for (let x = inicioCardsInventario; x < inicioCardsInventario + 50; x++) {
+    await axios.get(`/Inventory/ObtenerPartesIguales?planta=${planta}&material=${material}&parte=${nombreParte}`)
+        .then(response => {
+            partesIguales = response.data;
+            console.log(partesIguales);
 
-        let inv = arrayGlobalInventario[x];
+            partesIguales.forEach((inv) => {
 
-        if (inv.StorageBin === nombreParte) {
+                let tr = document.createElement('tr');
+                let tdTitulo = document.createElement('td');
+                let tdMaterial = document.createElement('td');
+                let tdMaterialDescripcion = document.createElement('td');
+                let tdTotal = document.createElement('td');
+                let tdTotalStock = document.createElement('td');
+                let grNumber = document.createElement('td');
 
-            let tr = document.createElement('tr');
-            let tdTitulo = document.createElement('td');
-            let tdMaterial = document.createElement('td');
-            let tdMaterialDescripcion = document.createElement('td');
-            let tdTotal = document.createElement('td');
-            let tdTotalStock = document.createElement('td');
+                tdTitulo.innerText = inv.StorageBin;
+                tdMaterial.innerText = inv.Material;
+                tdMaterialDescripcion.innerText = inv.MaterialDesc;
+                tdTotal.innerText = inv.TotalStock;
+                tdTotalStock.innerText = inv.StockSuma;
+                grNumber.innerText = inv.GrNumber;
 
-            tdTitulo.innerText = inv.StorageBin;
-            tdMaterial.innerText = inv.Material;
-            tdMaterialDescripcion.innerText = inv.MaterialDesc;
-            tdTotal.innerText = inv.TotalStock;
-            tdTotalStock.innerText = inv.StockSuma;
+                tr.appendChild(tdTitulo);
+                tr.appendChild(tdMaterial);
+                tr.appendChild(tdMaterialDescripcion);
+                tr.appendChild(tdTotal);
+                tr.appendChild(tdTotalStock);
+                tr.appendChild(grNumber);
 
-            tr.appendChild(tdTitulo);
-            tr.appendChild(tdMaterial);
-            tr.appendChild(tdMaterialDescripcion);
-            tr.appendChild(tdTotal);
-            tr.appendChild(tdTotalStock);
+                bodyTablaIgualesParte.appendChild(tr);
+            });
 
-            bodyTablaIgualesParte.appendChild(tr);
-        }
-
-    }
+        })
+        .catch(error => {
+            console.log(error);
+        });
 
     UIkit.modal(modalTablaInventario).show();
 }

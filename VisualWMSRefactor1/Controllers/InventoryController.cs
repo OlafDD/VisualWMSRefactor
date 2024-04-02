@@ -25,5 +25,16 @@ namespace VisualWMSRefactor1.Controllers
                 return Json(ex);
             }
         }
+        public JsonResult ObtenerPartesIguales(string planta, string material, string parte)
+        {
+            try
+            {
+                return Json(INVENTORY_RAW.ObtenerPartesIguales(planta,material,parte), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex);
+            }
+        }
     }
 }

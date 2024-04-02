@@ -19,7 +19,7 @@ namespace VisualWMSRefactor1.Models
         public string StorageType { get; set; }
         public string StorageBin { get; set; }
         //public string GrDate { get; set; }
-        //public string GrNumber { get; set; }
+        public string GrNumber { get; set; }
         public string TotalStock { get; set; }
         public string BaseUnit { get; set; }
         public string AvailableStock { get; set; }
@@ -76,6 +76,51 @@ namespace VisualWMSRefactor1.Models
                 conn.Close();
             }
             return inventario;
+        }
+        public static List<INVENTORY_RAW> ObtenerPartesIguales(string planta, string material, string parte)
+        {
+            List<INVENTORY_RAW> partes = new List<INVENTORY_RAW>();
+            SqlConnection conn = DBHelper.Conexion();
+            if (conn.State == ConnectionState.Closed)
+                conn.Open();
+            try
+            {
+                using (SqlCommand command = new SqlCommand("sp_INVENTORY_RAW_ObtenerPartesIguales", conn))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Planta", planta);
+                    command.Parameters.AddWithValue("@SBin", parte);
+                    command.Parameters.AddWithValue("@Material", material);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            partes.Add(new INVENTORY_RAW()
+                            {
+                                ID = reader.IsDBNull(0) ? decimal.Zero : reader.GetDecimal(0),
+                                Material = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                                StorageType = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
+                                StorageBin = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
+                                TotalStock = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
+                                StorageLocation = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
+                                GrNumber = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
+                                MaterialDesc = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
+                                StockSuma = reader.IsDBNull(8) ? int.MinValue : reader.GetInt32(8),
+                            });
+                        }
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return partes;
         }
     }
 }
