@@ -25,5 +25,16 @@ namespace VisualWMSRefactor1.Controllers
                 return Json(ex);
             }
         }
+        public JsonResult ObtenerTodo(string planta)
+        {
+            try
+            {
+                return Json(OTR_RAW.ObtenerTodoRequerimientos(planta), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex);
+            }
+        }
     }
 }

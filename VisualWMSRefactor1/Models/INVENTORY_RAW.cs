@@ -24,7 +24,7 @@ namespace VisualWMSRefactor1.Models
         public string BaseUnit { get; set; }
         public string AvailableStock { get; set; }
         public string BaseUnit1 { get; set; }
-        public string StockPut { get; set; }
+        public int StockPut { get; set; }
         public int StockSuma { get; set; }
         //public string BaseUnit2 { get; set; }
         //public string PickQuantity { get; set; }
@@ -57,8 +57,8 @@ namespace VisualWMSRefactor1.Models
                                 ID = reader.IsDBNull(0) ? decimal.Zero : reader.GetDecimal(0),
                                 Material = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
                                 StorageType = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
-                                StorageBin = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),   
-                                TotalStock = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
+                                StorageBin = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
+                                StockPut = reader.IsDBNull(4) ? int.MinValue : reader.GetInt32(4),
                                 StorageLocation = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
                                 MaterialDesc = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
                                 StockSuma = reader.IsDBNull(7) ? int.MinValue : reader.GetInt32(7),
@@ -107,6 +107,7 @@ namespace VisualWMSRefactor1.Models
                                 GrNumber = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
                                 MaterialDesc = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
                                 StockSuma = reader.IsDBNull(8) ? int.MinValue : reader.GetInt32(8),
+                                StorageUnit = reader.IsDBNull(9) ? string.Empty : reader.GetString(9)
                             });
                         }
                     }

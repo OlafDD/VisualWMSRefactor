@@ -9,6 +9,9 @@
     </div>
     <div class="uk-flex uk-margin-medium-bottom uk-overflow-auto">
         <div class="uk-flex">
+            <button class="uk-button uk-button-small" onclick="cargarInventario()" id="btnActualizar">Update</button>
+        </div>
+        <div class="uk-flex">
             <label class="uk-margin-large-left uk-margin-small-right">Storage type: </label>
             <div class="uk-flex" id="filtro-tipo-almacenamiento-inv">
             </div>
@@ -18,16 +21,23 @@
             <div class="uk-flex" id="filtro-localizar">
             </div>
         </div>
+        <div class="uk-flex wms-borde-card">
+            <label>
+                Check all
+                <input class="uk-checkbox uk-margin-small-left uk-margin-medium-right" type="checkbox" id="checkTodo" onclick="checkTodo()" checked>
+            </label>
+        </div>
+
     </div>
 
     <div id="inventario">
 
     </div>
-    <ul class="uk-pagination uk-flex-center" uk-margin id="paginacion">
-        <li><a href="#"><span uk-pagination-previous></span></a></li>
-        @*<li><a href="#">1</a></li>
-            <li><a href="#"><span uk-pagination-next></span></a></li>*@
-    </ul>
+    @*<ul class="uk-pagination uk-flex-center" uk-margin id="paginacion">
+            <li><a href="#"><span uk-pagination-previous></span></a></li>
+            <li><a href="#">1</a></li>
+                <li><a href="#"><span uk-pagination-next></span></a></li>
+        </ul>*@
 </main>
 
 <div id="modal-parte-inv" class="uk-flex-top" uk-modal>
@@ -44,6 +54,7 @@
                         <th>Total</th>
                         <th>Total Stock</th>
                         <th>GR Number</th>
+                        <th>Storage unit</th>
                     </tr>
                 </thead>
                 <tbody id="tbodyTabla">

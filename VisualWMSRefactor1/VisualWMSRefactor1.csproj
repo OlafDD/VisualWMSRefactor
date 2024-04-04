@@ -125,6 +125,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\actualizar-flecha.png" />
     <Content Include="Config\DBConfig.xml" />
     <Content Include="Content\Site.js" />
     <Content Include="Content\uikit-3.19.1\css\uikit-rtl.css" />
@@ -147,10 +148,12 @@
     <Content Include="Images\almacen.png" />
     <Content Include="Images\almacenamiento.png" />
     <Content Include="Images\custom.png" />
+    <Content Include="Images\desarrollo.png" />
     <Content Include="Images\home.png" />
     <Content Include="Images\inv.PNG" />
     <Content Include="Images\loading.gif" />
     <Content Include="Images\loading2.gif" />
+    <Content Include="Images\LogoPo.png" />
     <Content Include="Images\logosimple.PNG" />
     <Content Include="Images\maquina-elevadora.png" />
     <Content Include="Images\openorders.PNG" />

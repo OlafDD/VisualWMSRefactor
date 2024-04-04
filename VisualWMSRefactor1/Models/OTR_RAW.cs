@@ -79,6 +79,51 @@ namespace VisualWMSRefactor1.Models
             }
             return requerimientos;
         }
+        public static List<OTR_RAW> ObtenerTodoRequerimientos(string planta)
+        {
+            List<OTR_RAW> requerimientos = new List<OTR_RAW>();
+            SqlConnection conn = DBHelper.Conexion();
+            if (conn.State == ConnectionState.Closed)
+                conn.Open();
+            try
+            {
+                using (SqlCommand command = new SqlCommand("sp_OTR_RAW_ObtenerTodo", conn))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Planta", planta);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            requerimientos.Add(new OTR_RAW()
+                            {
+                                ID = reader.IsDBNull(0) ? decimal.Zero : reader.GetDecimal(0),
+                                DestStorBin = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                                Material = new PART_NUMBERS
+                                {
+                                    MatNR = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
+                                    MacTX = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
+                                },
+                                OP_User = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
+                                TRReqQuantity = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
+                                CreatedOn = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
+                                DestStoryType = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
+                            });
+                        }
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return requerimientos;
+        }
         public static List<string> ObtenerPlantasDistintas()
         {
             List<string> plantas = new List<string>();

@@ -1,32 +1,48 @@
 ﻿let warehouse = document.getElementById('plantaTitulo');
+let loader = document.getElementById('preloader_4');
+const contenedorRequerimientos = document.getElementById('requerimientos');
 const modalQR = document.getElementById('modal-qr');
+const selectFiltro = document.getElementById('selectFiltro');
+let tipoAlmacenamiento;
 let idCardCompletada;
+let planta;
+
+let filtroAlmacenamientoReq = [];
+
 window.onload = function () {
 
+
+    contenedorRequerimientos.setAttribute('class', 'uk-grid-column-small uk-grid-row-large uk-child-width-1-5@s uk-text-center');
+    contenedorRequerimientos.setAttribute('uk-grid', '');
     cargarRequerimientos();
+}
+
+let cargarFiltro = () => {
+
+    if (selectFiltro.value === 'todo') cargarTodoRequerimientos();
+    if (selectFiltro.value === '24') cargarRequerimientos();
+
 }
 
 let cargarRequerimientos = async () => {
 
     let fechaHace24Horas = moment().subtract(1, 'days').format('LLL');
-    let contenedorRequerimientos = document.getElementById('requerimientos');
     const valores = window.location.search;
     const urlParams = new URLSearchParams(valores);
-    let planta = urlParams.get('idp');
-    var tipoAlmacenamiento = [];
+    planta = urlParams.get('idp');
+    tipoAlmacenamiento = [];
 
     //Nombre título warehouse
     warehouse.innerHTML = `OPEN REQUEST ${planta}`;
-
-    contenedorRequerimientos.setAttribute('class', 'uk-grid-column-small uk-grid-row-large uk-child-width-1-4@s uk-text-center');
-    contenedorRequerimientos.setAttribute('uk-grid', '');
 
     await axios.get(`/OpenReq/ObtenerRequerimientos?fechaLimiteInferior=${fechaHace24Horas}&planta=${planta}`)
         .then(response => {
 
             let requerimientos = response.data;
 
-            console.log(requerimientos);
+            contenedorRequerimientos.innerHTML = '';
+
+            loader.style.display = 'flex';
             requerimientos.forEach(function (req) {
 
                 let card = document.createElement('div');
@@ -45,7 +61,7 @@ let cargarRequerimientos = async () => {
                 parrafoExistencia.innerText = `Stock Requeriment ${req.TRReqQuantity}`;
                 parrafoFecha.innerText = req.CreatedOn;
 
-                interiorCard.setAttribute('class', `uk-card-hover ${req.DestStoryType} cartas wms-borde-card`);
+                interiorCard.setAttribute('class', `${req.DestStoryType} wms-borde-card`);
                 interiorCard.setAttribute('id', `${req.ID}`);
                 tituloParte.setAttribute('class', 'wms-color-secundario-letra');
                 parrafoMaterial.setAttribute('onclick', `generarQR("${req.Material.MatNR}","${req.DestStorBin}","${req.ID}")`);
@@ -67,15 +83,85 @@ let cargarRequerimientos = async () => {
             });
 
             cargarFiltroAlmacenamiento(tipoAlmacenamiento);
+
+            loader.style.display = 'none';
         })
         .catch(error => {
             console.log(error);
+            loader.style.display = 'none';
+        });
+}
+
+let cargarTodoRequerimientos = async () => {
+
+
+    tipoAlmacenamiento = [];
+
+    loader.style.display = 'flex';
+
+    await axios.get(`/OpenReq/ObtenerTodo?planta=${planta}`)
+        .then(response => {
+
+            let requerimientos = response.data;
+
+            contenedorRequerimientos.innerHTML = '';
+
+            console.log(requerimientos);
+            requerimientos.forEach(function (req) {
+
+                let card = document.createElement('div');
+                let interiorCard = document.createElement('div');
+                let tituloParte = document.createElement('h3');
+                let parrafoMaterial = document.createElement('p');
+                let parrafoDescMaterial = document.createElement('p');
+                let parrafoUsuario = document.createElement('p');
+                let parrafoExistencia = document.createElement('p');
+                let parrafoFecha = document.createElement('p');
+
+                tituloParte.innerText = req.DestStorBin;
+                parrafoMaterial.innerText = req.Material.MatNR;
+                parrafoDescMaterial.innerText = req.Material.MacTX;
+                parrafoUsuario.innerText = `User: ${req.OP_User}`;
+                parrafoExistencia.innerText = `Stock Requeriment ${req.TRReqQuantity}`;
+                parrafoFecha.innerText = req.CreatedOn;
+
+                interiorCard.setAttribute('class', `${req.DestStoryType} wms-borde-card`);
+                interiorCard.setAttribute('id', `${req.ID}`);
+                tituloParte.setAttribute('class', 'wms-color-secundario-letra');
+                parrafoMaterial.setAttribute('onclick', `generarQR("${req.Material.MatNR}","${req.DestStorBin}","${req.ID}")`);
+                parrafoMaterial.setAttribute('class', 'wms-material-hover');
+
+                card.appendChild(interiorCard);
+                interiorCard.appendChild(tituloParte);
+                interiorCard.appendChild(parrafoMaterial);
+                interiorCard.appendChild(parrafoDescMaterial);
+                interiorCard.appendChild(parrafoUsuario);
+                interiorCard.appendChild(parrafoExistencia);
+                interiorCard.appendChild(parrafoFecha);
+
+                contenedorRequerimientos.appendChild(card);
+
+                //Añadir a arreglo de almacenamiento
+                tipoAlmacenamiento.push(req.DestStoryType);
+
+            });
+
+            filtroAlmacenamientoReq = tipoAlmacenamiento;
+
+            cargarFiltroAlmacenamiento(tipoAlmacenamiento);
+            loader.style.display = 'none';
+        })
+        .catch(error => {
+            console.log(error);
+            loader.style.display = 'none';
         });
 }
 
 let cargarFiltroAlmacenamiento = (tipoAlmacenamiento) => {
 
     let seccionFiltroAlmacenamiento = document.getElementById('filtro-tipo-almacenamiento');
+
+    seccionFiltroAlmacenamiento.innerHTML = '';
 
     eliminarDuplicados(tipoAlmacenamiento);
     tipoAlmacenamiento.forEach((tipo) => {
@@ -110,22 +196,32 @@ let eliminarDuplicados = (a) => {
 
 let filtroAlmacenamiento = (tipoAlmacenamiento) => {
 
-    let cardsOcultar = document.getElementsByClassName(tipoAlmacenamiento);
-    let cardsMostrar = document.getElementsByClassName('cartas');
     let checkBox = document.getElementById(tipoAlmacenamiento);
+    let hijosInventario = contenedorRequerimientos.childNodes;
 
-    if (!checkBox.checked) {
-        //for (let carta = 0; carta < cardsMostrar.length; carta++) {
-        //    cardsMostrar[carta].style.display = 'block';
-        //}
-        for (let carta = 0; carta < cardsOcultar.length; carta++) {
-            cardsOcultar[carta].style.display = 'none';
-        }
+    console.log(filtroAlmacenamientoReq);
+
+    if (checkBox.checked) {
+        filtroAlmacenamientoReq.push(tipoAlmacenamiento);
     }
     else {
-        for (let carta = 0; carta < cardsOcultar.length; carta++) {
-            cardsOcultar[carta].style.display = 'block';
-        }
+        filtroAlmacenamientoReq = filtroAlmacenamientoReq.filter(filtro => filtro != tipoAlmacenamiento);
+    }
+    
+    for (let x = 0; x < hijosInventario.length; x++) {
+
+        let claseAlmacenamiento = false;
+        let nombreClaseAlmacenamiento = hijosInventario[x].firstChild.className.split(" ")[0];
+
+        filtroAlmacenamientoReq.forEach((filtro) => {
+            if (nombreClaseAlmacenamiento === filtro)
+                claseAlmacenamiento = true;
+        });
+
+        if (claseAlmacenamiento)
+            hijosInventario[x].style.display = 'block';
+        else
+            hijosInventario[x].style.display = 'none';
     }
 
 }

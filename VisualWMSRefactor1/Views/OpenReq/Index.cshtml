@@ -10,9 +10,9 @@
     <div class="uk-flex uk-margin-medium-bottom uk-overflow-auto">
         <div class="uk-flex">
             <label class="uk-margin-small-right">Filter: </label>
-            <select class="uk-select uk-width-small" aria-label="Select">
-                <option>24 Hrs</option>
-                <option>Top 50</option>
+            <select class="uk-select uk-width-small" aria-label="Select" onchange="cargarFiltro()" id="selectFiltro">
+                <option value="24">24 Hrs</option>
+                <option value="todo">All</option>
             </select>
         </div>
         <div class="uk-flex">
@@ -25,7 +25,6 @@
 
     </div>
 </main>
-@*<a class="uk-button uk-button-default" href="#modal-center" uk-toggle>Open</a>*@
 
 <div id="modal-qr" class="uk-flex-top" uk-modal>
     <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
@@ -41,6 +40,14 @@
             </div>
         </div>
     </div>
+</div>
+
+<div id="preloader_4">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
 </div>
 
 <script src="~/Scripts/OpenReq/OpenReq.js"></script>
