@@ -26,14 +26,14 @@ namespace VisualWMSRefactor1.Helpers
                 Database = dbInfoDB[0].InnerText;
                 XmlNodeList dbInfoUser = xmlDoc.GetElementsByTagName("user");
                 User = dbInfoUser[0].InnerText;
-                //XmlNodeList dbInfoPassword = xmlDoc.GetElementsByTagName("password");
-                //Password = dbInfoPassword[0].InnerText;
+                XmlNodeList dbInfoPassword = xmlDoc.GetElementsByTagName("password");
+                Password = dbInfoPassword[0].InnerText;
             }
             catch
             {
 
             }
-            string connectionString = $"Data Source={Server};Initial Catalog={Database}; integrated security = true;";
+            string connectionString = $"Server={Server};Database={Database}; User ID={User}; Password={Password}";
             SqlConnection connection = new SqlConnection(connectionString);
             connection.Open();
             return connection;

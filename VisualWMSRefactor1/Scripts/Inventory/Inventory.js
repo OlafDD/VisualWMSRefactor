@@ -246,7 +246,7 @@ let filtroAlmacenamiento = (tipoAlmacenamiento) => {
         else
             hijosInventario[x].style.display = 'none';
     }
-
+    console.log(filtros);
 }
 
 let filtroLocacion = (locacionAlmacenamiento) => {
@@ -281,6 +281,7 @@ let filtroLocacion = (locacionAlmacenamiento) => {
         else
             hijosInventario[x].style.display = 'none';
     }
+    console.log(filtros);
 }
 
 let checkFiltros = () => {
@@ -313,15 +314,21 @@ let checkTodo = () => {
 
     if (checkTodo.checked) {
         checkFiltros();
-        verCards();
+        filtros.almacenamiento = tipoAlmacenamiento;
+        filtros.locacion = locacion;
+        for (let x = 0; x < hijosInventario.length; x++) {
+            hijosInventario[x].style.display = 'block';
+        }
     }
     else {
         uncheckFiltros();
+        filtros.almacenamiento = [];
+        filtros.locacion = [];
         for (let x = 0; x < hijosInventario.length; x++) {
             hijosInventario[x].style.display = 'none';
         }
     }
-
+    console.log(filtros);
 
 
 }

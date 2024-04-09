@@ -3,6 +3,7 @@
 	<dataBase datos="WMSDataBase">
 		<server>(localdb)\SERVERPRUEBA</server>
 		<db>ONIXWMS</db>
-		<user>AD\olivier.martinez</user>
+		<user>onixwms</user>
+		<password>root@ISA1234</password>
 	</dataBase>
 </conexion>
