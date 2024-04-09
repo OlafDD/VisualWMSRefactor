@@ -145,9 +145,9 @@ namespace VisualWMSRefactor1.Models
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                
             }
             finally
             {

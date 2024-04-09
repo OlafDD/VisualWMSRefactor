@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using VisualWMSRefactor1.Helpers;
+using System.Runtime.Remoting.Messaging;
 
 namespace VisualWMSRefactor1.Models
 {
@@ -67,9 +68,12 @@ namespace VisualWMSRefactor1.Models
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                inventario.Add(new INVENTORY_RAW()
+                {
+                    Material = ex.Message,
+                });
             }
             finally
             {

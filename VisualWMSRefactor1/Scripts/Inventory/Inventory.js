@@ -59,6 +59,8 @@ let cargarInventario = async () => {
 
             let inventario = response.data;
 
+            console.log(inventario);
+
             arrayGlobalInventario = inventario;
             inventario.forEach(function (inv) {
 
