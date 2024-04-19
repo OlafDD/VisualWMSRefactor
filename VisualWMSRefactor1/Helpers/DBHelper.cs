@@ -33,7 +33,7 @@ namespace VisualWMSRefactor1.Helpers
             {
 
             }
-            string connectionString = $"Server={Server};Database={Database}; User ID={User}; Password={Password}";
+            string connectionString = $"Server={Server};Database={Database}; User ID={User}; Password={Password}; Connection Timeout=240";
             SqlConnection connection = new SqlConnection(connectionString);
             connection.Open();
             return connection;

@@ -346,6 +346,8 @@ let verPartesIguales = async (nombreParte, material, planta) => {
         .then(response => {
             partesIguales = response.data;
 
+            console.log(partesIguales);
+
             partesIguales.forEach((inv) => {
 
                 let tr = document.createElement('tr');

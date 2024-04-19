@@ -21,7 +21,7 @@ namespace VisualWMSRefactor1.Models
         public string StorageBin { get; set; }
         //public string GrDate { get; set; }
         public string GrNumber { get; set; }
-        public string TotalStock { get; set; }
+        public int TotalStock { get; set; }
         public string BaseUnit { get; set; }
         public string AvailableStock { get; set; }
         public string BaseUnit1 { get; set; }
@@ -40,14 +40,17 @@ namespace VisualWMSRefactor1.Models
         {
             List<INVENTORY_RAW> inventario = new List<INVENTORY_RAW>();
             SqlConnection conn = DBHelper.Conexion();
+
             if (conn.State == ConnectionState.Closed)
                 conn.Open();
+            
             try
             {
                 using (SqlCommand command = new SqlCommand("sp_INVENTORY_RAW_ObtenerTodo", conn))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@Planta", planta);
+                    command.CommandTimeout = 240;
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -106,7 +109,7 @@ namespace VisualWMSRefactor1.Models
                                 Material = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
                                 StorageType = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
                                 StorageBin = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
-                                TotalStock = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
+                                TotalStock = reader.IsDBNull(4) ? int.MinValue : reader.GetInt32(4),
                                 StorageLocation = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
                                 GrNumber = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
                                 MaterialDesc = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
@@ -117,9 +120,12 @@ namespace VisualWMSRefactor1.Models
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                partes.Add(new INVENTORY_RAW()
+                {
+                    Material = ex.Message,
+                });
             }
             finally
             {
