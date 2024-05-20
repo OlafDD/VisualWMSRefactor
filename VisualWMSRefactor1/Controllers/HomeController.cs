@@ -22,7 +22,7 @@ namespace VisualWMSRefactor1.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex);
+                return Json(ex,JsonRequestBehavior.AllowGet);
             }
         }
     }

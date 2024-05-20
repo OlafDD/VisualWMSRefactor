@@ -22,7 +22,7 @@ namespace VisualWMSRefactor1.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex);
+                return Json(ex, JsonRequestBehavior.AllowGet);
             }
         }
         public JsonResult ObtenerPartesIguales(string planta, string material, string parte)
@@ -33,7 +33,18 @@ namespace VisualWMSRefactor1.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex);
+                return Json(ex, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public JsonResult ObtenerUltimaActualizacion()
+        {
+            try
+            {
+                return Json(INVENTORY_RAW.ObtenerUltimaActualizacion(), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex, JsonRequestBehavior.AllowGet);
             }
         }
     }

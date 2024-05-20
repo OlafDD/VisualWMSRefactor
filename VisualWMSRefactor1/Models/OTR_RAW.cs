@@ -155,5 +155,36 @@ namespace VisualWMSRefactor1.Models
             }
             return plantas;
         }
+        public static string ObtenerUltimaActualizacion()
+        {
+            string ultimaFecha = "";
+            SqlConnection conn = DBHelper.Conexion();
+            if (conn.State == ConnectionState.Closed)
+                conn.Open();
+            try
+            {
+                using (SqlCommand command = new SqlCommand("sp_OPEN_REQ_Obtener_Ultima_Actualizacion", conn))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            ultimaFecha = reader.IsDBNull(0) ? string.Empty : reader.GetString(0);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ultimaFecha = ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return ultimaFecha;
+        }
     }
 }

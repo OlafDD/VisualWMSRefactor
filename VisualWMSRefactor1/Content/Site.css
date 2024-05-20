@@ -110,3 +110,26 @@
 .margin-total {
     margin: 0px 0px 20px;
 }
+
+.fondo-home {
+    background-image: url("/Images/fondo2.png");
+}
+
+.letra-blanca{
+    color: #ffffff;
+}
+
+.fuente-wms{
+    font-size: 20px;
+    color: #000000;
+}
+
+.filtro-material{
+    overflow-x: scroll;
+    display: flex;
+}
+
+.material-filtro-padding {
+    padding: 0 5px 0 5px;
+    font-size: 14px;
+}

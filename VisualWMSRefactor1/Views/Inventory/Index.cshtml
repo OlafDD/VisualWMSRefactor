@@ -27,9 +27,15 @@
                 <input class="uk-checkbox uk-margin-small-left uk-margin-medium-right" type="checkbox" id="checkTodo" onclick="checkTodo()" checked>
             </label>
         </div>
-
     </div>
-
+    <div class="uk-margin-bottom uk-flex">
+        <label>Last update: </label>
+        <label id="lastUpdate"></label>
+        <label class="uk-margin-small-right uk-margin-left">Storage bin: </label>
+        <select class="uk-select uk-width-small" aria-label="Select"  id="filtroMaterialSelect" onchange="filtroMaterial()">
+            
+        </select>
+    </div>
     <div id="inventario">
 
     </div>

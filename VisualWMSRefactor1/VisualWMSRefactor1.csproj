@@ -149,6 +149,9 @@
     <Content Include="Images\almacenamiento.png" />
     <Content Include="Images\custom.png" />
     <Content Include="Images\desarrollo.png" />
+    <Content Include="Images\fondo1.png" />
+    <Content Include="Images\fondo2.png" />
+    <Content Include="Images\fondo3.png" />
     <Content Include="Images\home.png" />
     <Content Include="Images\inv.PNG" />
     <Content Include="Images\loading.gif" />

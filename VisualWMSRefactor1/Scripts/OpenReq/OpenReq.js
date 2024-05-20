@@ -8,9 +8,9 @@ let idCardCompletada;
 let planta;
 
 let filtroAlmacenamientoReq = [];
+let material = [];
 
 window.onload = function () {
-
 
     contenedorRequerimientos.setAttribute('class', 'uk-grid-column-small uk-grid-row-large uk-child-width-1-5@s uk-text-center');
     contenedorRequerimientos.setAttribute('uk-grid', '');
@@ -31,9 +31,10 @@ let cargarRequerimientos = async () => {
     const urlParams = new URLSearchParams(valores);
     planta = urlParams.get('idp');
     tipoAlmacenamiento = [];
+    material = [];
 
     //Nombre título warehouse
-    warehouse.innerHTML = `OPEN REQUEST ${planta}`;
+    warehouse.innerHTML = `OPEN REQUEST / ORDENES ABIERTAS ${planta}`;
 
     await axios.get(`/OpenReq/ObtenerRequerimientos?fechaLimiteInferior=${fechaHace24Horas}&planta=${planta}`)
         .then(response => {
@@ -61,11 +62,11 @@ let cargarRequerimientos = async () => {
                 parrafoExistencia.innerText = `Stock Requeriment ${req.TRReqQuantity}`;
                 parrafoFecha.innerText = req.CreatedOn;
 
-                interiorCard.setAttribute('class', `${req.DestStoryType} wms-borde-card`);
+                interiorCard.setAttribute('class', `${req.DestStoryType} ${req.DestStorBin} wms-borde-card`);
                 interiorCard.setAttribute('id', `${req.ID}`);
                 tituloParte.setAttribute('class', 'wms-color-secundario-letra');
                 parrafoMaterial.setAttribute('onclick', `generarQR("${req.Material.MatNR}","${req.DestStorBin}","${req.ID}")`);
-                parrafoMaterial.setAttribute('class','wms-material-hover');
+                parrafoMaterial.setAttribute('class', 'wms-material-hover');
 
                 card.appendChild(interiorCard);
                 interiorCard.appendChild(tituloParte);
@@ -79,12 +80,18 @@ let cargarRequerimientos = async () => {
 
                 //Añadir a arreglo de almacenamiento
                 tipoAlmacenamiento.push(req.DestStoryType);
+                material.push(req.DestStorBin);
 
             });
 
+            filtroAlmacenamientoReq = tipoAlmacenamiento;
+            filtroMaterial = material;
+
             cargarFiltroAlmacenamiento(tipoAlmacenamiento);
+            cargarFiltroMaterial(filtroMaterial);
 
             loader.style.display = 'none';
+            lastUpdate();
         })
         .catch(error => {
             console.log(error);
@@ -96,6 +103,7 @@ let cargarTodoRequerimientos = async () => {
 
 
     tipoAlmacenamiento = [];
+    material = [];
 
     loader.style.display = 'flex';
 
@@ -125,7 +133,7 @@ let cargarTodoRequerimientos = async () => {
                 parrafoExistencia.innerText = `Stock Requeriment ${req.TRReqQuantity}`;
                 parrafoFecha.innerText = req.CreatedOn;
 
-                interiorCard.setAttribute('class', `${req.DestStoryType} wms-borde-card`);
+                interiorCard.setAttribute('class', `${req.DestStoryType} ${req.DestStorBin} wms-borde-card`);
                 interiorCard.setAttribute('id', `${req.ID}`);
                 tituloParte.setAttribute('class', 'wms-color-secundario-letra');
                 parrafoMaterial.setAttribute('onclick', `generarQR("${req.Material.MatNR}","${req.DestStorBin}","${req.ID}")`);
@@ -143,12 +151,17 @@ let cargarTodoRequerimientos = async () => {
 
                 //Añadir a arreglo de almacenamiento
                 tipoAlmacenamiento.push(req.DestStoryType);
+                material.push(req.DestStorBin);
 
             });
 
             filtroAlmacenamientoReq = tipoAlmacenamiento;
+            filtroMaterial = material;
 
             cargarFiltroAlmacenamiento(tipoAlmacenamiento);
+            cargarFiltroMaterial(filtroMaterial);
+
+            lastUpdate();
             loader.style.display = 'none';
         })
         .catch(error => {
@@ -182,6 +195,33 @@ let cargarFiltroAlmacenamiento = (tipoAlmacenamiento) => {
     });
 }
 
+let cargarFiltroMaterial = (material) => {
+
+    let selectFiltroMaterial = document.getElementById('filtroMaterialSelectOR');
+
+    selectFiltroMaterial.innerHTML = '';
+
+    let opMaterial = document.createElement('option');
+
+    opMaterial.setAttribute('id', `Reset`);
+    opMaterial.innerText = 'Reset';
+
+    selectFiltroMaterial.appendChild(opMaterial);
+
+    eliminarDuplicados(material);
+    material.forEach((mat) => {
+
+        let opMaterial = document.createElement('option');
+
+        opMaterial.setAttribute('id', `${mat}`);
+        opMaterial.innerText = mat;
+
+        selectFiltroMaterial.appendChild(opMaterial);
+    });
+}
+
+
+
 let eliminarDuplicados = (a) => {
 
     for (let i = a.length - 1; i > 0; i--) {
@@ -198,8 +238,8 @@ let filtroAlmacenamiento = (tipoAlmacenamiento) => {
 
     let checkBox = document.getElementById(tipoAlmacenamiento);
     let hijosInventario = contenedorRequerimientos.childNodes;
-
-    console.log(filtroAlmacenamientoReq);
+    let materialItem = document.getElementById('filtroMaterialSelectOR').value;
+    let matFiltro = [];
 
     if (checkBox.checked) {
         filtroAlmacenamientoReq.push(tipoAlmacenamiento);
@@ -207,26 +247,79 @@ let filtroAlmacenamiento = (tipoAlmacenamiento) => {
     else {
         filtroAlmacenamientoReq = filtroAlmacenamientoReq.filter(filtro => filtro != tipoAlmacenamiento);
     }
-    
+
+
     for (let x = 0; x < hijosInventario.length; x++) {
 
         let claseAlmacenamiento = false;
+
         let nombreClaseAlmacenamiento = hijosInventario[x].firstChild.className.split(" ")[0];
+        let nombreClaseMaterial = hijosInventario[x].firstChild.className.split(" ")[1];
 
         filtroAlmacenamientoReq.forEach((filtro) => {
             if (nombreClaseAlmacenamiento === filtro)
                 claseAlmacenamiento = true;
         });
 
-        if (claseAlmacenamiento)
+        if (claseAlmacenamiento) {
             hijosInventario[x].style.display = 'block';
+            matFiltro.push(nombreClaseMaterial);
+        }
         else
             hijosInventario[x].style.display = 'none';
+    }
+    cargarFiltroMaterial(matFiltro);
+}
+
+let filtroMaterialFunc = () => {
+
+    let hijosInventario = contenedorRequerimientos.childNodes;
+    let materialItem = document.getElementById('filtroMaterialSelectOR').value;
+
+    if (materialItem === 'Reset') {
+        for (let x = 0; x < hijosInventario.length; x++) {
+
+            let claseAlmacenamiento = false;
+
+            let nombreClaseAlmacenamiento = hijosInventario[x].firstChild.className.split(" ")[0];
+
+            filtroAlmacenamientoReq.forEach((filtro) => {
+                if (nombreClaseAlmacenamiento === filtro)
+                    claseAlmacenamiento = true;
+            });
+
+            if (claseAlmacenamiento)
+                hijosInventario[x].style.display = 'block';
+            else
+                hijosInventario[x].style.display = 'none';
+        }
+    }
+    else {
+        for (let x = 0; x < hijosInventario.length; x++) {
+
+            let claseAlmacenamiento = false;
+            let claseMaterial = false;
+
+            let nombreClaseAlmacenamiento = hijosInventario[x].firstChild.className.split(" ")[0];
+            let nombreClaseMaterial = hijosInventario[x].firstChild.className.split(" ")[1];
+
+            filtroAlmacenamientoReq.forEach((filtro) => {
+                if (nombreClaseAlmacenamiento === filtro)
+                    claseAlmacenamiento = true;
+            });
+            if (nombreClaseMaterial === materialItem)
+                claseMaterial = true;
+
+            if (claseAlmacenamiento && claseMaterial)
+                hijosInventario[x].style.display = 'block';
+            else
+                hijosInventario[x].style.display = 'none';
+        }
     }
 
 }
 
-let generarQR = (material,parte,idRequerimiento) => {
+let generarQR = (material, parte, idRequerimiento) => {
 
     let divQR = document.getElementById('qrcode');
     let pQR = document.getElementById('qr-p');
@@ -255,4 +348,22 @@ let completarRequerimiento = () => {
     cardCompletadaVerde.style.backgroundColor = '#49ff49';
     UIkit.modal(modalQR).hide();
     UIkit.notification("Requirement completed...", "success");
+}
+
+let lastUpdate = () => {
+
+    const parrafoActualizacion = document.getElementById('lastUpdateOR');
+
+    axios.get(`/OpenReq/ObtenerUltimaActualizacion`)
+        .then(response => {
+            utimaActualizacion = response.data;
+
+            console.log(utimaActualizacion);
+
+            parrafoActualizacion.innerHTML = '';
+            parrafoActualizacion.innerHTML = utimaActualizacion;
+        })
+        .catch(error => {
+            console.log(error);
+        });
 }

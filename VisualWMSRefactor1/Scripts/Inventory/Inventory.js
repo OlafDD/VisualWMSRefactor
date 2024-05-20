@@ -1,6 +1,7 @@
 ﻿
 const seccionFiltroAlmacenamiento = document.getElementById('filtro-tipo-almacenamiento-inv');
 const seccionFiltroLocacion = document.getElementById('filtro-localizar');
+const selectFiltroMaterial = document.getElementById('filtroMaterialSelect');
 const btnActualizar = document.getElementById('btnActualizar');
 const cantidadPaginacion = 50;
 let warehouse = document.getElementById('plantaTituloInventario');
@@ -8,12 +9,14 @@ let loader = document.getElementById('preloader_4');
 let contenedorInventario = document.getElementById('inventario');
 let tipoAlmacenamiento = [];
 let locacion = [];
+let material = [];
 let arrayGlobalInventario = [];
 let direccionAlmacenamiento = [];
 let materialesEliminar = [];
 let filtros = {
     almacenamiento: [],
-    locacion: []
+    locacion: [],
+    material: []
 };
 let inicioCardsInventario = 0;
 let planta;
@@ -25,12 +28,13 @@ window.onload = function () {
     planta = urlParams.get('idp');
 
     //Nombre título warehouse
-    warehouse.innerHTML = `INVENTORY ${planta}`;
+    warehouse.innerHTML = `INVENTORY / INVENTARIO ${planta}`;
 
     contenedorInventario.setAttribute('class', 'uk-grid-column-small uk-grid-row-large uk-child-width-1-5@s uk-text-center');
     contenedorInventario.setAttribute('uk-grid', '');
 
     cargarInventario();
+
 }
 
 let cargarInventario = async () => {
@@ -51,6 +55,7 @@ let cargarInventario = async () => {
     contenedorInventario.innerHTML = '';
     seccionFiltroAlmacenamiento.innerHTML = '';
     seccionFiltroLocacion.innerHTML = '';
+    selectFiltroMaterial.innerHTML = '';
 
     btnActualizar.disabled = true;
 
@@ -59,13 +64,12 @@ let cargarInventario = async () => {
 
             let inventario = response.data;
 
-            console.log(inventario);
-
             arrayGlobalInventario = inventario;
             inventario.forEach(function (inv) {
 
                 tipoAlmacenamiento.push(inv.StorageType);
                 locacion.push(inv.StorageLocation);
+                material.push(inv.StorageBin);
 
                 //Llenar array de locacion almacenamiento con los diferentes
 
@@ -91,14 +95,18 @@ let cargarInventario = async () => {
             //cargarPaginacion(arrayGlobalInventario.length);
             cargarFiltroAlmacenamiento(tipoAlmacenamiento);
             cargarFiltroLocacion(locacion);
+            cargarFiltroMaterial(material);
 
             filtros.almacenamiento = tipoAlmacenamiento;
             filtros.locacion = locacion;
+            filtros.material = material;
 
             verCards();
             checkFiltros();
             btnActualizar.disabled = false;
             loader.style.display = 'none';
+
+            lastUpdate();
         })
         .catch(error => {
             console.log(error);
@@ -167,17 +175,32 @@ let cargarFiltroLocacion = (locacion) => {
     });
 }
 
-let verCards = (/*limiteInferiorArray*/) => {
+let cargarFiltroMaterial = (material) => {
+
+    let opMaterial = document.createElement('option');
+
+    selectFiltroMaterial.innerHTML = '';
+
+    opMaterial.setAttribute('id', `Reset`);
+    opMaterial.innerText = 'Reset';
+
+    selectFiltroMaterial.appendChild(opMaterial);
+
+    eliminarDuplicados(material);
+    material.forEach((mat) => {
+
+        let opMaterial = document.createElement('option');
+
+        opMaterial.setAttribute('id', `${mat}`);
+        opMaterial.innerText = mat;
+
+        selectFiltroMaterial.appendChild(opMaterial);
+    });
+}
+
+let verCards = () => {
 
     contenedorInventario.innerHTML = '';
-    //let limiteSuperiorArray = limiteInferiorArray + 50;
-
-    //if (limiteSuperiorArray > arrayGlobalInventario.length) limiteSuperiorArray = arrayGlobalInventario.length;
-
-    //inicioCardsInventario = limiteInferiorArray;
-
-    //filtros.almacenamiento = tipoAlmacenamiento;
-    //filtros.locacion = locacion;
 
     for (let x = 0; x < arrayGlobalInventario.length; x++) {
 
@@ -194,8 +217,8 @@ let verCards = (/*limiteInferiorArray*/) => {
         tituloParte.innerText = `${inv.StorageBin}`;
         parrafoMaterial.innerText = `${inv.Material}`;
         parrafoDescMaterial.innerText = `${inv.MaterialDesc}`;
-        total.innerText = `${inv.StockPut}`;
-        totalSuma.innerText = `${inv.StockSuma}`;
+        total.innerText = `Total Bin: ${inv.StockPut}`;
+        totalSuma.innerText = `Total WMS Stock: ${inv.StockSuma}`;
 
         card.appendChild(interiorCard);
         interiorCard.appendChild(tituloParte);
@@ -210,7 +233,7 @@ let verCards = (/*limiteInferiorArray*/) => {
         divSumaTotal.setAttribute('class', 'flex-space');
         totalSuma.setAttribute('class', 'margin-total');
         interiorCard.setAttribute('class', 'wms-borde-card');
-        card.setAttribute('class', `${inv.StorageType} ${inv.StorageLocation}`);
+        card.setAttribute('class', `${inv.StorageType} ${inv.StorageLocation} ${inv.StorageBin}`);
 
         contenedorInventario.appendChild(card);
     }
@@ -220,6 +243,7 @@ let filtroAlmacenamiento = (tipoAlmacenamiento) => {
 
     let checkBox = document.getElementById(tipoAlmacenamiento);
     let hijosInventario = contenedorInventario.childNodes;
+    let matFiltro = [];
 
     if (checkBox.checked) {
         filtros.almacenamiento.push(tipoAlmacenamiento);
@@ -228,12 +252,14 @@ let filtroAlmacenamiento = (tipoAlmacenamiento) => {
         filtros.almacenamiento = filtros.almacenamiento.filter(filtro => filtro != tipoAlmacenamiento);
     }
 
+
     for (let x = 0; x < hijosInventario.length; x++) {
 
         let claseAlmacenamiento = false;
         let claseLocacion = false;
         let nombreClaseAlmacenamiento = hijosInventario[x].className.split(" ")[0];
         let nombreClaseLocacion = hijosInventario[x].className.split(" ")[1];
+        let nombreClaseMaterial = hijosInventario[x].className.split(" ")[2];
 
         filtros.almacenamiento.forEach((filtro) => {
             if (nombreClaseAlmacenamiento === filtro)
@@ -243,18 +269,54 @@ let filtroAlmacenamiento = (tipoAlmacenamiento) => {
             if (nombreClaseLocacion === filtro)
                 claseLocacion = true;
         })
-        if (claseAlmacenamiento && claseLocacion)
+
+        if (claseAlmacenamiento && claseLocacion) {
             hijosInventario[x].style.display = 'block';
+            matFiltro.push(nombreClaseMaterial);
+        }
         else
             hijosInventario[x].style.display = 'none';
     }
-    console.log(filtros);
+    cargarFiltroMaterial(matFiltro);
+
+    //else {
+
+    //    for (let x = 0; x < hijosInventario.length; x++) {
+
+    //        let claseAlmacenamiento = false;
+    //        let claseLocacion = false;
+    //        let claseMaterial = false;
+    //        let nombreClaseAlmacenamiento = hijosInventario[x].className.split(" ")[0];
+    //        let nombreClaseLocacion = hijosInventario[x].className.split(" ")[1];
+    //        let nombreClaseMaterial = hijosInventario[x].className.split(" ")[2];
+
+    //        filtros.almacenamiento.forEach((filtro) => {
+    //            if (nombreClaseAlmacenamiento === filtro)
+    //                claseAlmacenamiento = true;
+    //        });
+    //        filtros.locacion.forEach((filtro) => {
+    //            if (nombreClaseLocacion === filtro)
+    //                claseLocacion = true;
+    //        })
+    //        if (nombreClaseMaterial === material)
+    //            claseMaterial = true;
+
+    //        if (claseAlmacenamiento && claseLocacion && claseMaterial) {
+    //            hijosInventario[x].style.display = 'block';
+    //            matFiltro.push(nombreClaseMaterial);
+    //        }
+    //        else
+    //            hijosInventario[x].style.display = 'none';
+    //    }
+    //    cargarFiltroMaterial(matFiltro);
+    //}
 }
 
 let filtroLocacion = (locacionAlmacenamiento) => {
 
     let checkBox = document.getElementById(locacionAlmacenamiento);
     let hijosInventario = contenedorInventario.childNodes;
+    let matFiltro = [];
 
     if (checkBox.checked) {
         filtros.locacion.push(locacionAlmacenamiento);
@@ -269,6 +331,7 @@ let filtroLocacion = (locacionAlmacenamiento) => {
         let claseLocacion = false;
         let nombreClaseAlmacenamiento = hijosInventario[x].className.split(" ")[0];
         let nombreClaseLocacion = hijosInventario[x].className.split(" ")[1];
+        let nombreClaseMaterial = hijosInventario[x].className.split(" ")[2];
 
         filtros.almacenamiento.forEach((filtro) => {
             if (nombreClaseAlmacenamiento === filtro)
@@ -278,12 +341,107 @@ let filtroLocacion = (locacionAlmacenamiento) => {
             if (nombreClaseLocacion === filtro)
                 claseLocacion = true;
         })
-        if (claseAlmacenamiento && claseLocacion)
+
+        if (claseAlmacenamiento && claseLocacion) {
             hijosInventario[x].style.display = 'block';
+            matFiltro.push(nombreClaseMaterial);
+        }
         else
             hijosInventario[x].style.display = 'none';
     }
-    console.log(filtros);
+    cargarFiltroMaterial(matFiltro);
+
+    //else {
+
+    //    for (let x = 0; x < hijosInventario.length; x++) {
+
+    //        let claseAlmacenamiento = false;
+    //        let claseLocacion = false;
+    //        let claseMaterial = false;
+    //        let nombreClaseAlmacenamiento = hijosInventario[x].className.split(" ")[0];
+    //        let nombreClaseLocacion = hijosInventario[x].className.split(" ")[1];
+    //        let nombreClaseMaterial = hijosInventario[x].className.split(" ")[2];
+
+    //        filtros.almacenamiento.forEach((filtro) => {
+    //            if (nombreClaseAlmacenamiento === filtro)
+    //                claseAlmacenamiento = true;
+    //        });
+    //        filtros.locacion.forEach((filtro) => {
+    //            if (nombreClaseLocacion === filtro)
+    //                claseLocacion = true;
+    //        })
+    //        if (nombreClaseMaterial === material)
+    //            claseMaterial = true;
+
+    //        if (claseAlmacenamiento && claseLocacion && claseMaterial) {
+    //            hijosInventario[x].style.display = 'block';
+    //            matFiltro.push(nombreClaseMaterial);
+    //        }
+
+    //        else
+    //            hijosInventario[x].style.display = 'none';
+    //    }
+    //    cargarFiltroMaterial(matFiltro);
+    //}
+}
+
+let filtroMaterial = () => {
+
+    let material = selectFiltroMaterial.value;
+    console.log(material);
+    let hijosInventario = contenedorInventario.childNodes;
+
+    if (material === 'Reset') {
+        for (let x = 0; x < hijosInventario.length; x++) {
+
+            let claseAlmacenamiento = false;
+            let claseLocacion = false;
+            let nombreClaseAlmacenamiento = hijosInventario[x].className.split(" ")[0];
+            let nombreClaseLocacion = hijosInventario[x].className.split(" ")[1];
+
+            filtros.almacenamiento.forEach((filtro) => {
+                if (nombreClaseAlmacenamiento === filtro)
+                    claseAlmacenamiento = true;
+            });
+            filtros.locacion.forEach((filtro) => {
+                if (nombreClaseLocacion === filtro)
+                    claseLocacion = true;
+            })
+
+            if (claseAlmacenamiento && claseLocacion)
+                hijosInventario[x].style.display = 'block';
+            else
+                hijosInventario[x].style.display = 'none';
+        }
+    }
+    else {
+        for (let x = 0; x < hijosInventario.length; x++) {
+
+            let claseAlmacenamiento = false;
+            let claseLocacion = false;
+            let claseMaterial = false;
+            let nombreClaseAlmacenamiento = hijosInventario[x].className.split(" ")[0];
+            let nombreClaseLocacion = hijosInventario[x].className.split(" ")[1];
+            let nombreClaseMaterial = hijosInventario[x].className.split(" ")[2];
+
+            filtros.almacenamiento.forEach((filtro) => {
+                if (nombreClaseAlmacenamiento === filtro)
+                    claseAlmacenamiento = true;
+            });
+            filtros.locacion.forEach((filtro) => {
+                if (nombreClaseLocacion === filtro)
+                    claseLocacion = true;
+            })
+            if (nombreClaseMaterial === material)
+                claseMaterial = true;
+
+
+            if (claseAlmacenamiento && claseLocacion && claseMaterial)
+                hijosInventario[x].style.display = 'block';
+            else
+                hijosInventario[x].style.display = 'none';
+        }
+    }
 }
 
 let checkFiltros = () => {
@@ -296,6 +454,7 @@ let checkFiltros = () => {
         document.getElementById(tipo).checked = true;
     });
 
+    selectFiltroMaterial.value = 'Reset';
 }
 
 let uncheckFiltros = () => {
@@ -308,6 +467,8 @@ let uncheckFiltros = () => {
         document.getElementById(tipo).checked = false;
     });
 
+    //selectFiltroMaterial.value = 'Reset';
+    cargarFiltroMaterial([]);
 }
 
 let checkTodo = () => {
@@ -318,21 +479,22 @@ let checkTodo = () => {
         checkFiltros();
         filtros.almacenamiento = tipoAlmacenamiento;
         filtros.locacion = locacion;
+        filtros.material = material;
         for (let x = 0; x < hijosInventario.length; x++) {
             hijosInventario[x].style.display = 'block';
         }
+        cargarFiltroMaterial(material);
     }
     else {
         uncheckFiltros();
         filtros.almacenamiento = [];
         filtros.locacion = [];
+        filtros.material = [];
         for (let x = 0; x < hijosInventario.length; x++) {
             hijosInventario[x].style.display = 'none';
         }
     }
-    console.log(filtros);
-
-
+    cargarFiltroMaterial
 }
 
 let verPartesIguales = async (nombreParte, material, planta) => {
@@ -396,4 +558,20 @@ let eliminarDuplicados = (a) => {
             }
         }
     }
+}
+
+let lastUpdate = () => {
+
+    const parrafoActualizacion = document.getElementById('lastUpdate');
+
+    axios.get(`/Inventory/ObtenerUltimaActualizacion`)
+        .then(response => {
+            utimaActualizacion = response.data;
+
+            parrafoActualizacion.innerHTML = '';
+            parrafoActualizacion.innerHTML = utimaActualizacion;
+        })
+        .catch(error => {
+            console.log(error);
+        });
 }

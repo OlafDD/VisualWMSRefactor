@@ -14,12 +14,19 @@
                 <option value="24">24 Hrs</option>
                 <option value="todo">All</option>
             </select>
+            <label class="uk-margin-small-right uk-margin-left">Storage bin: </label>
+            <select class="uk-select uk-width-small" aria-label="Select" id="filtroMaterialSelectOR" onchange="filtroMaterialFunc()">
+            </select>
         </div>
         <div class="uk-flex">
             <label class="uk-margin-large-left uk-margin-small-right">Storage type: </label>
             <div class="uk-flex" id="filtro-tipo-almacenamiento">
             </div>
         </div>
+    </div>
+    <div class="uk-margin-bottom uk-flex">
+        <label>Last update: </label>
+        <label id="lastUpdateOR"></label>
     </div>
     <div id="requerimientos">
 

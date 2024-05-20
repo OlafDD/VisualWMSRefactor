@@ -2,18 +2,17 @@
     ViewBag.Title = "Home Page";
 }
 
-<main class="uk-padding">
+<main class="uk-padding fondo-home">
     <div>
-        <h1 class="uk-nav-center wms-color-secundario-letra wms-subtitulo-azul">WAREHOUSE</h1>
+        <h1 class="uk-nav-center wms-color-secundario-letra wms-subtitulo-azul">Visual Warehouse Management System</h1>
     </div>
-    <div class="uk-flex uk-margin-medium-bottom">
+    <div class="uk-flex uk-margin-medium-bottom uk-flex-center">
         @*<div>
                 <button class="uk-button uk-button-primary uk-margin-small-right">Product Line</button>
             </div>*@
-        <div class="uk-flex">
-            <label class="uk-margin-small-right">Plant filter: </label>
+        <div class="uk-flex uk-flex-center">
+            <label class="uk-margin-small-right letra-blanca">Plant: </label>
             <select class="uk-select uk-width-small" aria-label="Select" id="plantas">
-                <option selected></option>
             </select>
         </div>
     </div>
@@ -21,19 +20,19 @@
         <div>
             <div class="uk-card uk-card-default uk-card-body uk-card-hover wms-borde-card" onclick="IrInventario()">
                 <img src="~/Images/almacenamiento.png" />
-                <h2>INVENTORY</h2>
+                <h2>INVENTORY<br />(Inventario)</h2>
             </div>
         </div>
         <div>
             <div class="uk-card uk-card-default uk-card-body uk-card-hover wms-borde-card" onclick="IrRequerimientos()">
                 <img src="~/Images/maquina-elevadora.png" />
-                <h2>OPEN REQ</h2>
+                <h2>OPEN REQUESTS<br />(Ordenes abiertas)</h2>
             </div>
         </div>
         <div>
             <div class="uk-card uk-card-default uk-card-body uk-card-hover wms-borde-card" onclick="IrReceiving()">
                 <img src="~/Images/valores.png" />
-                <h2>RECEIVING</h2>
+                <h2>RECEIVING<br />(Recibo)</h2>
             </div>
         </div>
     </div>
