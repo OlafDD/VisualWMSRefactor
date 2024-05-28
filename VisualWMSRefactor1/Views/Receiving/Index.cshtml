@@ -5,10 +5,39 @@
 
 <main class="uk-padding">
     <div>
-        <h1 class="uk-nav-center wms-color-secundario-letra wms-subtitulo-azul">Developing...</h1>
+        <h1 class="uk-nav-center wms-color-secundario-letra wms-subtitulo-azul" id="plantaTituloMinMax"></h1>
     </div>
-    <div class="uk-flex uk-flex-center">
-        <img src="~/Images/desarrollo.png" width="300"/>
+    <div class="uk-margin">
+        <label class="uk-margin-left">Storage Bin:</label>
+        <input class="uk-input uk-form-width-medium" type="text" placeholder="ABCD-EF" id="bin-filtro">
+        <label class="uk-margin-left">Material:</label>
+        <input class="uk-input uk-form-width-medium" type="text" placeholder="0123456QWER" id="material-filtro">
+        <button class="uk-button uk-button-small uk-margin-left" onclick="filtrarMinMax()" id="btnActualizar">Filter</button>
+        <label class="uk-margin-left">Last update: </label>
+        <label id="lastUpdateMinMax"></label>
     </div>
+    <table class="uk-table uk-table-hover uk-table-divider uk-table-responsive">
+        <thead>
+            <tr>
+                <th>Warehouse</th>
+                <th>Storage Bin</th>
+                <th>Material</th>
+                <th>Minimum Bin Quantity</th>
+                <th>Maximum Bin Quantity</th>
+                <th>Total stock</th>
+            </tr>
+        </thead>
+        <tbody id="bodyMinMax">
+        </tbody>
+    </table>
 </main>
 
+<div id="preloader_4">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
+<script src="~/Scripts/MinMax/MinMax.js"></script>

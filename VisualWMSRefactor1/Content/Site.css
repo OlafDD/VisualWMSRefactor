@@ -10,6 +10,26 @@
     background-color: #49ff49;
 }
 
+.wms-rojo{
+    background-color: #f81313;
+}
+
+.wms-amarillo {
+    background-color: #fffa21;
+}
+
+.wms-verde {
+    background-color: #39fe00;
+}
+
+.color-negro{
+    color: #000000;
+}
+
+.color-blanco {
+    color: #FFFFFF;
+}
+
 .wms-footer{
     display: flex;
     justify-content: center;

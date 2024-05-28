@@ -278,38 +278,6 @@ let filtroAlmacenamiento = (tipoAlmacenamiento) => {
             hijosInventario[x].style.display = 'none';
     }
     cargarFiltroMaterial(matFiltro);
-
-    //else {
-
-    //    for (let x = 0; x < hijosInventario.length; x++) {
-
-    //        let claseAlmacenamiento = false;
-    //        let claseLocacion = false;
-    //        let claseMaterial = false;
-    //        let nombreClaseAlmacenamiento = hijosInventario[x].className.split(" ")[0];
-    //        let nombreClaseLocacion = hijosInventario[x].className.split(" ")[1];
-    //        let nombreClaseMaterial = hijosInventario[x].className.split(" ")[2];
-
-    //        filtros.almacenamiento.forEach((filtro) => {
-    //            if (nombreClaseAlmacenamiento === filtro)
-    //                claseAlmacenamiento = true;
-    //        });
-    //        filtros.locacion.forEach((filtro) => {
-    //            if (nombreClaseLocacion === filtro)
-    //                claseLocacion = true;
-    //        })
-    //        if (nombreClaseMaterial === material)
-    //            claseMaterial = true;
-
-    //        if (claseAlmacenamiento && claseLocacion && claseMaterial) {
-    //            hijosInventario[x].style.display = 'block';
-    //            matFiltro.push(nombreClaseMaterial);
-    //        }
-    //        else
-    //            hijosInventario[x].style.display = 'none';
-    //    }
-    //    cargarFiltroMaterial(matFiltro);
-    //}
 }
 
 let filtroLocacion = (locacionAlmacenamiento) => {
@@ -351,38 +319,6 @@ let filtroLocacion = (locacionAlmacenamiento) => {
     }
     cargarFiltroMaterial(matFiltro);
 
-    //else {
-
-    //    for (let x = 0; x < hijosInventario.length; x++) {
-
-    //        let claseAlmacenamiento = false;
-    //        let claseLocacion = false;
-    //        let claseMaterial = false;
-    //        let nombreClaseAlmacenamiento = hijosInventario[x].className.split(" ")[0];
-    //        let nombreClaseLocacion = hijosInventario[x].className.split(" ")[1];
-    //        let nombreClaseMaterial = hijosInventario[x].className.split(" ")[2];
-
-    //        filtros.almacenamiento.forEach((filtro) => {
-    //            if (nombreClaseAlmacenamiento === filtro)
-    //                claseAlmacenamiento = true;
-    //        });
-    //        filtros.locacion.forEach((filtro) => {
-    //            if (nombreClaseLocacion === filtro)
-    //                claseLocacion = true;
-    //        })
-    //        if (nombreClaseMaterial === material)
-    //            claseMaterial = true;
-
-    //        if (claseAlmacenamiento && claseLocacion && claseMaterial) {
-    //            hijosInventario[x].style.display = 'block';
-    //            matFiltro.push(nombreClaseMaterial);
-    //        }
-
-    //        else
-    //            hijosInventario[x].style.display = 'none';
-    //    }
-    //    cargarFiltroMaterial(matFiltro);
-    //}
 }
 
 let filtroMaterial = () => {

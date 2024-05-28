@@ -120,6 +120,7 @@
     </Compile>
     <Compile Include="Helpers\DBHelper.cs" />
     <Compile Include="Models\INVENTORY_RAW.cs" />
+    <Compile Include="Models\MINMAX_RAW.cs" />
     <Compile Include="Models\OTR_RAW.cs" />
     <Compile Include="Models\PART_NUMBERS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -176,6 +177,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\MinMax\MinMax.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment.js" />

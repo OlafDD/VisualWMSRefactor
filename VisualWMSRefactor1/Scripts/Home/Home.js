@@ -48,3 +48,13 @@ let IrInventario = () => {
     else
         window.location.href = `/Inventory/Index?idp=${plantaSeleccionada}`;
 }
+
+let IrReceiving = () => {
+
+    plantaSeleccionada = document.getElementById('plantas').value;
+
+    if (plantaSeleccionada === "")
+        UIkit.notification("You must choose a plant...", "warning");
+    else
+        window.location.href = `/Receiving/Index?idp=${plantaSeleccionada}`;
+}
