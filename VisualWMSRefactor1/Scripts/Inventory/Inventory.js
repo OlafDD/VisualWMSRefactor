@@ -230,6 +230,7 @@ let verCards = () => {
 
         tituloParte.setAttribute('class', 'wms-color-secundario-letra wms-material-hover');
         tituloParte.setAttribute('onclick', `verPartesIguales('${inv.StorageBin}','${inv.Material}','${planta}')`);
+        parrafoMaterial.setAttribute('onclick',`fotoMaterial('${inv.Material}')`);
         divSumaTotal.setAttribute('class', 'flex-space');
         totalSuma.setAttribute('class', 'margin-total');
         interiorCard.setAttribute('class', 'wms-borde-card');
@@ -510,4 +511,27 @@ let lastUpdate = () => {
         .catch(error => {
             console.log(error);
         });
+}
+
+let fotoMaterial = (materialNombre) => {
+
+    let modalFoto = document.getElementById('modal-foto-material');
+    let titulo = document.getElementById('titulo-material-foto');
+    let foto = document.getElementById('foto-Material');
+
+    titulo.innerText = materialNombre;
+    //foto.src = `\\\\sleowp0004\\WMS_Pictures_Parts\\fotosTest\\${materialNombre}.jpg`
+    //foto.src = `C:\\Users\\olivier.martinez\\OneDrive - PLASTIC OMNIUM\\Desktop\\fotosTest\\${materialNombre}.jpg`
+
+    axios.get(`/Inventory/ObtenerFotoMaterial?material=${materialNombre}`)
+        .then(response => {
+            utimaActualizacion = response.data;
+            console.log(utimaActualizacion);
+            foto.src = utimaActualizacion;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+    UIkit.modal(modalFoto).show();
 }

@@ -119,6 +119,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DBHelper.cs" />
+    <Compile Include="Helpers\FotoHelper.cs" />
     <Compile Include="Models\INVENTORY_RAW.cs" />
     <Compile Include="Models\MINMAX_RAW.cs" />
     <Compile Include="Models\OTR_RAW.cs" />

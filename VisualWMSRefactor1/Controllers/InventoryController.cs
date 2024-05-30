@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using VisualWMSRefactor1.Helpers;
 using VisualWMSRefactor1.Models;
 
 namespace VisualWMSRefactor1.Controllers
@@ -29,7 +30,7 @@ namespace VisualWMSRefactor1.Controllers
         {
             try
             {
-                return Json(INVENTORY_RAW.ObtenerPartesIguales(planta,material,parte), JsonRequestBehavior.AllowGet);
+                return Json(INVENTORY_RAW.ObtenerPartesIguales(planta, material, parte), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -46,6 +47,11 @@ namespace VisualWMSRefactor1.Controllers
             {
                 return Json(ex, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public JsonResult ObtenerFotoMaterial(string material)
+        {
+            return Json(FotoHelper.FotoBase64(material), JsonRequestBehavior.AllowGet);
         }
     }
 }
