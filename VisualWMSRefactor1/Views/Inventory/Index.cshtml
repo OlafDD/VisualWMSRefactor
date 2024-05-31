@@ -32,8 +32,7 @@
         <label>Last update: </label>
         <label id="lastUpdate"></label>
         <label class="uk-margin-small-right uk-margin-left">Storage bin: </label>
-        <select class="uk-select uk-width-small" aria-label="Select"  id="filtroMaterialSelect" onchange="filtroMaterial()">
-            
+        <select class="uk-select uk-width-small" aria-label="Select" id="filtroMaterialSelect" onchange="filtroMaterial()">
         </select>
     </div>
     <div id="inventario">
@@ -76,7 +75,10 @@
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-margin-top">
             <h3 id="titulo-material-foto" class="wms-footer"></h3>
-            <img src="" id="foto-Material"/>
+            <span class="wms-footer">
+                <img src="" id="foto-Material" />
+            </span>
+            <p id="descripcion-foto" class="wms-footer"></p>
         </div>
     </div>
 </div>

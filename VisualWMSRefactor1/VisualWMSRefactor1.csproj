@@ -127,6 +127,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Config\ImageConfig.xml" />
     <Content Include="Images\actualizar-flecha.png" />
     <Content Include="Config\DBConfig.xml" />
     <Content Include="Content\Site.js" />

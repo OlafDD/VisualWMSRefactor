@@ -230,7 +230,8 @@ let verCards = () => {
 
         tituloParte.setAttribute('class', 'wms-color-secundario-letra wms-material-hover');
         tituloParte.setAttribute('onclick', `verPartesIguales('${inv.StorageBin}','${inv.Material}','${planta}')`);
-        parrafoMaterial.setAttribute('onclick',`fotoMaterial('${inv.Material}')`);
+        parrafoMaterial.setAttribute('onclick', `fotoMaterial('${inv.Material}','${inv.MaterialDesc}')`);
+        parrafoMaterial.setAttribute('class','wms-material-hover');
         divSumaTotal.setAttribute('class', 'flex-space');
         totalSuma.setAttribute('class', 'margin-total');
         interiorCard.setAttribute('class', 'wms-borde-card');
@@ -513,21 +514,22 @@ let lastUpdate = () => {
         });
 }
 
-let fotoMaterial = (materialNombre) => {
+let fotoMaterial = (materialNombre, materialDescripcion) => {
 
     let modalFoto = document.getElementById('modal-foto-material');
     let titulo = document.getElementById('titulo-material-foto');
+    let descripcion = document.getElementById('descripcion-foto');
     let foto = document.getElementById('foto-Material');
 
-    titulo.innerText = materialNombre;
+    titulo.innerText = `Material:  ${materialNombre}`; 
+    descripcion.innerText = `Description:  ${materialDescripcion}`;
     //foto.src = `\\\\sleowp0004\\WMS_Pictures_Parts\\fotosTest\\${materialNombre}.jpg`
     //foto.src = `C:\\Users\\olivier.martinez\\OneDrive - PLASTIC OMNIUM\\Desktop\\fotosTest\\${materialNombre}.jpg`
 
     axios.get(`/Inventory/ObtenerFotoMaterial?material=${materialNombre}`)
         .then(response => {
-            utimaActualizacion = response.data;
-            console.log(utimaActualizacion);
-            foto.src = utimaActualizacion;
+            fotoSrc = response.data;
+            foto.src = fotoSrc;
         })
         .catch(error => {
             console.log(error);
